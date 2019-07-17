@@ -9,6 +9,8 @@
   "author": "xuejun",
   "license": "MIT",
   "dependencies": {
+    "bcrypt": "^3.0.6",
+    "glob": "^7.1.4",
     "koa": "^2.7.0",
     "mongoose": "^5.6.4",
     "nanoid": "^2.0.3",
