@@ -1,13 +1,9 @@
 const mongoose = require('mongoose')
 const glob = require('glob')
 const {resolve} = require('path')
-const db = 'mongodb://localhost/douban-trailer'
+const db = 'mongodb://localhost/douban-demo'
 
 mongoose.Promise = global.Promise
-
-exports.initScheme = () => {
-    glob.sync(resolve(__dirname, './scheme', '**/*.js')).forEach(require)
-}
 
 exports.connect = () => {
     let maxConnectTimes = 0
@@ -43,15 +39,29 @@ exports.connect = () => {
         })
     
         mongoose.connection.once('open', () => {
-            const Dog = mongoose.model('Dog', {name: String})
-            const doga = new Dog({name: '阿尔法'})
-
-            doga.save().then(() => {
-                console.log('wang')
-            })
-
             resolve()
             console.log('MongoDB Connected successfully!')
         })
     })
+}
+
+exports.initScheme = () => {
+    glob.sync(resolve(__dirname, './scheme', '**/*.js')).forEach(require)
+}
+
+exports.initAdmin = async () => {
+    const User = mongoose.model('User')
+    let user = await User.findOne({
+        username: 'xuejun'
+    })
+
+    if (!user) {
+        const user = new User({
+            username: 'xuejun',
+            email: 'koa2@imooc.com',
+            password: '123abc'
+        })
+
+        await user.save()
+    }
 }
